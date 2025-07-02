@@ -27,7 +27,7 @@ A RESTful API service for calculating End of Service Benefits (EOSB) according t
 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/abhisekmallik/uae-gratuity-calculator-backend
 cd uae-gratuity-calculator-backend
 ```
 
@@ -296,7 +296,7 @@ This UAE EOSB Calculator Backend is a **production-ready**, **fully-tested** API
 ### 📊 **Key Features**
 
 - ✅ RESTful API with standardized responses
-- ✅ Configuration API for frontend integration  
+- ✅ Configuration API for frontend integration
 - ✅ Health check and monitoring endpoints
 - ✅ Development and production environments
 - ✅ Comprehensive logging and error tracking
@@ -349,15 +349,15 @@ The project includes a comprehensive test suite with **100% code coverage** ensu
 
 #### Coverage by Module
 
-| Module | Statements | Branches | Functions | Lines |
-|--------|------------|----------|-----------|-------|
-| **swagger.ts** | 100% | 100% | 100% | 100% |
-| **eosbController.ts** | 100% | 100% | 100% | 100% |
-| **errorHandler.ts** | 100% | 100% | 100% | 100% |
-| **validation.ts** | 100% | 100% | 100% | 100% |
-| **eosbRoutes.ts** | 100% | 100% | 100% | 100% |
-| **configuration.ts** | 100% | 100% | 100% | 100% |
-| **eosbCalculator.ts** | 100% | 100% | 100% | 100% |
+| Module                | Statements | Branches | Functions | Lines |
+| --------------------- | ---------- | -------- | --------- | ----- |
+| **swagger.ts**        | 100%       | 100%     | 100%      | 100%  |
+| **eosbController.ts** | 100%       | 100%     | 100%      | 100%  |
+| **errorHandler.ts**   | 100%       | 100%     | 100%      | 100%  |
+| **validation.ts**     | 100%       | 100%     | 100%      | 100%  |
+| **eosbRoutes.ts**     | 100%       | 100%     | 100%      | 100%  |
+| **configuration.ts**  | 100%       | 100%     | 100%      | 100%  |
+| **eosbCalculator.ts** | 100%       | 100%     | 100%      | 100%  |
 
 ### Test Categories
 
@@ -426,7 +426,7 @@ tests/
 The test suite covers all critical scenarios including:
 
 - ✅ **All EOSB calculation formulas** and edge cases
-- ✅ **Date calculations** with complex month/day adjustments  
+- ✅ **Date calculations** with complex month/day adjustments
 - ✅ **Resignation penalty logic** for all service periods
 - ✅ **API validation** for all input combinations
 - ✅ **Error handling** for malformed requests
