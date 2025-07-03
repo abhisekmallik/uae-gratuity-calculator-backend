@@ -35,11 +35,6 @@ export const validateEmployeeData = [
         throw new Error("Last working day must be after joining date");
       }
 
-      const today = new Date();
-      if (lastWorkingDay > today) {
-        throw new Error("Last working day cannot be in the future");
-      }
-
       return true;
     }),
 ];

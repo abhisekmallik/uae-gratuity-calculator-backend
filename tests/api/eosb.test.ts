@@ -313,29 +313,6 @@ describe("EOSB API Integration Tests", () => {
       );
     });
 
-    test("should return 400 for future last working day", async () => {
-      const futureDate = new Date();
-      futureDate.setFullYear(futureDate.getFullYear() + 1);
-
-      const invalidData = {
-        basicSalary: 10000,
-        terminationType: "termination",
-        isUnlimitedContract: true,
-        joiningDate: "2020-01-01",
-        lastWorkingDay: futureDate.toISOString().split("T")[0],
-      };
-
-      const response = await request(app)
-        .post("/api/eosb/calculate")
-        .send(invalidData)
-        .expect(400);
-
-      expect(response.body).toMatchObject({
-        success: false,
-        error: "Validation failed",
-      });
-    });
-
     test("should accept optional allowances field", async () => {
       const dataWithAllowances = {
         basicSalary: 10000,
@@ -376,6 +353,27 @@ describe("EOSB API Integration Tests", () => {
       expect(response.body.message).toContain(
         "Allowances must be a positive number"
       );
+    });
+
+    test("should accept future last working day", async () => {
+      const futureDate = new Date();
+      futureDate.setFullYear(futureDate.getFullYear() + 1);
+
+      const dataWithFutureDate = {
+        basicSalary: 10000,
+        terminationType: "termination",
+        isUnlimitedContract: true,
+        joiningDate: "2020-01-01",
+        lastWorkingDay: futureDate.toISOString().split("T")[0],
+      };
+
+      const response = await request(app)
+        .post("/api/eosb/calculate")
+        .send(dataWithFutureDate)
+        .expect(200);
+
+      expect(response.body.success).toBe(true);
+      expect(response.body.data).toBeDefined();
     });
   });
 

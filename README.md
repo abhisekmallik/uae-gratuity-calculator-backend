@@ -8,7 +8,7 @@ A RESTful API service for calculating End of Service Benefits (EOSB) according t
 - ✅ **Correct Daily Wage Calculation** - Uses proper `(Monthly Salary ÷ 30) × Eligible Days` formula
 - ✅ **Precise Service Period** - Accurate year, month, and day calculation using calendar dates
 - ✅ **Proper Penalty Logic** - Resignation penalties only apply to unlimited contracts
-- ✅ **Input Validation** - Comprehensive validation of employee data
+- ✅ **Input Validation** - Comprehensive validation with flexible date handling
 - ✅ **Configuration API** - Dynamic dropdown values and calculation rules
 - ✅ **CORS Support** - Ready for frontend integration
 - ✅ **Rate Limiting** - Protection against abuse
@@ -135,6 +135,42 @@ Calculate EOSB for an employee
     },
     "isEligible": true
   }
+}
+```
+
+## Input Validation
+
+The API includes comprehensive input validation to ensure data integrity:
+
+### Required Fields
+
+- **basicSalary**: Must be a positive number
+- **terminationType**: Must be one of: `resignation`, `termination`, `retirement`, `death`, `disability`
+- **isUnlimitedContract**: Must be a boolean value
+- **joiningDate**: Must be a valid ISO8601 date
+- **lastWorkingDay**: Must be a valid ISO8601 date
+
+### Optional Fields
+
+- **allowances**: Must be a positive number if provided
+
+### Date Validation Rules
+
+- **Date Format**: All dates must be in ISO8601 format (YYYY-MM-DD)
+- **Date Logic**: `lastWorkingDay` must be after `joiningDate`
+- **Future Dates**: ✅ **Future dates are allowed** for `lastWorkingDay` to support planning and projection scenarios
+- **Historical Dates**: All historical dates are supported
+
+### Example Valid Request
+
+```json
+{
+  "basicSalary": 10000,
+  "allowances": 2000,
+  "terminationType": "termination",
+  "isUnlimitedContract": true,
+  "joiningDate": "2020-01-01",
+  "lastWorkingDay": "2026-12-31"  // Future date allowed
 }
 ```
 
