@@ -13,8 +13,21 @@
     "test:coverage": "jest --coverage",
     "test:ci": "jest --ci --coverage --watchAll=false"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "uae",
+    "eosb",
+    "end-of-service-benefits",
+    "gratuity",
+    "calculator",
+    "labor-law",
+    "api",
+    "express",
+    "typescript",
+    "nodejs",
+    "backend",
+    "rest-api"
+  ],
+  "author": "Abhisek Mallik",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

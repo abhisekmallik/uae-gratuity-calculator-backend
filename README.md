@@ -313,7 +313,7 @@ This backend is ready for deployment and integration with frontend applications,
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the ISC License.
 
 ## Support
 
