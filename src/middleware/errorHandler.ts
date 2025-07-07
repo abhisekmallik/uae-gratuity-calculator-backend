@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ApiResponse } from "../types";
+import { logger } from "../utils/logger";
 
 export const errorHandler = (
   error: any,
@@ -7,10 +8,17 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.error("Unhandled error:", error);
+  logger.logError(error, "Unhandled error", {
+    method: req.method,
+    url: req.url,
+    ip: req.ip,
+  });
 
   // Handle JSON parsing errors
-  if ((error && error.type === "entity.parse.failed") || error instanceof SyntaxError) {
+  if (
+    (error && error.type === "entity.parse.failed") ||
+    error instanceof SyntaxError
+  ) {
     const response: ApiResponse<null> = {
       success: false,
       error: "Invalid JSON",
@@ -38,7 +46,11 @@ export const errorHandler = (
     message:
       process.env.NODE_ENV === "production"
         ? "Something went wrong"
-        : (error && error.message) ? error.message : (typeof error === 'string' ? error : undefined),
+        : error && error.message
+        ? error.message
+        : typeof error === "string"
+        ? error
+        : undefined,
   };
 
   res.status(500).json(response);

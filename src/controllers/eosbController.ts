@@ -7,6 +7,7 @@ import {
 } from "../types";
 import { appConfiguration } from "../utils/configuration";
 import { EOSBCalculator } from "../utils/eosbCalculator";
+import { logger } from "../utils/logger";
 
 export class EOSBController {
   /**
@@ -19,7 +20,19 @@ export class EOSBController {
     try {
       const employeeData: EmployeeData = req.body;
 
+      logger.logRequest(req, "Received employee data for EOSB calculation", {
+        employeeData,
+      });
+
       const result = EOSBCalculator.calculate(employeeData);
+
+      logger.info("EOSB calculation completed successfully", {
+        result: {
+          gratuityAmount: result.gratuityAmount,
+          totalServiceYears: result.totalServiceYears,
+          isEligible: result.isEligible,
+        },
+      });
 
       const response: ApiResponse<EOSBCalculationResult> = {
         success: true,
@@ -29,7 +42,9 @@ export class EOSBController {
 
       res.status(200).json(response);
     } catch (error) {
-      console.error("Error calculating EOSB:", error);
+      logger.logError(error, "Error calculating EOSB", {
+        employeeData: req.body,
+      });
 
       const response: ApiResponse<null> = {
         success: false,
@@ -49,6 +64,8 @@ export class EOSBController {
     res: Response
   ): Promise<void> {
     try {
+      logger.logRequest(req, "Configuration data requested");
+
       const response: ApiResponse<ConfigurationData> = {
         success: true,
         data: appConfiguration,
@@ -57,7 +74,7 @@ export class EOSBController {
 
       res.status(200).json(response);
     } catch (error) {
-      console.error("Error getting configuration:", error);
+      logger.logError(error, "Error getting configuration");
 
       const response: ApiResponse<null> = {
         success: false,

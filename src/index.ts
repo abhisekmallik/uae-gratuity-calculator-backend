@@ -8,6 +8,7 @@ import morgan from "morgan";
 import { setupSwagger } from "./config/swagger";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import eosbRoutes from "./routes/eosbRoutes";
+import { logger } from "./utils/logger";
 
 // Load environment variables
 dotenv.config();
@@ -91,12 +92,12 @@ app.use(errorHandler);
 // Start server only if this file is run directly (not imported)
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
-    console.log(`📋 OpenAPI Spec: http://localhost:${PORT}/api-docs.json`);
-    console.log(`🏥 Health Check: http://localhost:${PORT}/api/eosb/health`);
-    console.log(`⚙️ Configuration: http://localhost:${PORT}/api/eosb/config`);
-    console.log(
+    logger.info(`🚀 Server running on port ${PORT}`);
+    logger.info(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
+    logger.info(`📋 OpenAPI Spec: http://localhost:${PORT}/api-docs.json`);
+    logger.info(`🏥 Health Check: http://localhost:${PORT}/api/eosb/health`);
+    logger.info(`⚙️ Configuration: http://localhost:${PORT}/api/eosb/config`);
+    logger.info(
       `🧮 EOSB Calculator: http://localhost:${PORT}/api/eosb/calculate`
     );
   });

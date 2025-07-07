@@ -14,7 +14,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       expect(result.isEligible).toBe(true);
       expect(result.totalServiceYears).toBeGreaterThanOrEqual(1);
     });
@@ -30,7 +30,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       expect(result.isEligible).toBe(true);
       expect(result.totalServiceYears).toBeGreaterThanOrEqual(1);
     });
@@ -48,7 +48,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       expect(result.isEligible).toBe(false);
       expect(result.gratuityAmount).toBe(0);
     });
@@ -64,7 +64,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       expect(result.isEligible).toBe(true);
       expect(result.gratuityAmount).toBeGreaterThan(0);
       // Should be 1/3 of full amount
@@ -82,7 +82,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       expect(result.isEligible).toBe(false);
       expect(result.gratuityAmount).toBe(0);
     });
@@ -99,7 +99,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       // Should be eligible (>=365 days) but gratuity should be 0 due to resignation penalty
       expect(result.isEligible).toBe(true);
       expect(result.gratuityAmount).toBe(0);
@@ -116,7 +116,7 @@ describe("EOSBCalculator Edge Cases", () => {
       };
 
       const result = EOSBCalculator.calculate(employeeData);
-      
+
       expect(result.isEligible).toBe(true);
       expect(result.gratuityAmount).toBe(0);
     });

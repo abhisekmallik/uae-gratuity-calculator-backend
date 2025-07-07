@@ -12,6 +12,7 @@ A RESTful API service for calculating End of Service Benefits (EOSB) according t
 - ✅ **Configuration API** - Dynamic dropdown values and calculation rules
 - ✅ **CORS Support** - Ready for frontend integration
 - ✅ **Rate Limiting** - Protection against abuse
+- ✅ **Production Logger** - Environment-based logging with disable option for production
 - ✅ **TypeScript** - Type-safe development
 - ✅ **Security** - Helmet.js and security best practices
 
@@ -170,7 +171,7 @@ The API includes comprehensive input validation to ensure data integrity:
   "terminationType": "termination",
   "isUnlimitedContract": true,
   "joiningDate": "2020-01-01",
-  "lastWorkingDay": "2026-12-31"  // Future date allowed
+  "lastWorkingDay": "2026-12-31" // Future date allowed
 }
 ```
 
@@ -292,6 +293,36 @@ NODE_ENV=development
 PORT=3001
 FRONTEND_URL=http://localhost:3000
 API_VERSION=1.0.0
+
+# Logging Configuration
+LOG_LEVEL=DEBUG
+ENABLE_CONSOLE_LOGGING=true
+```
+
+### Logging Configuration
+
+The application includes a sophisticated logging system that can be configured via environment variables:
+
+- `LOG_LEVEL`: Controls which log levels are output
+
+  - `ERROR`: Only error messages (recommended for production)
+  - `WARN`: Warnings and errors
+  - `INFO`: Informational messages, warnings, and errors
+  - `DEBUG`: All log levels (recommended for development)
+
+- `ENABLE_CONSOLE_LOGGING`: Controls whether logs are written to console
+  - `true`: Enable console logging (recommended for development/testing)
+  - `false`: Disable console logging (recommended for production)
+  - Default: `false` in production, `true` in development/test
+
+#### Production Logging
+
+In production, logging is disabled by default to improve performance and avoid cluttering logs. To enable logging in production:
+
+```env
+NODE_ENV=production
+LOG_LEVEL=ERROR
+ENABLE_CONSOLE_LOGGING=true
 ```
 
 ## Technology Stack
@@ -301,7 +332,7 @@ API_VERSION=1.0.0
 - **Language**: TypeScript
 - **Validation**: express-validator
 - **Security**: helmet, cors, express-rate-limit
-- **Logging**: morgan
+- **Logging**: Custom logger with environment-based configuration, morgan for HTTP requests
 
 ## Summary
 
@@ -316,10 +347,11 @@ This UAE EOSB Calculator Backend is a **production-ready**, **fully-tested** API
 
 ### 🧪 **100% Test Coverage**
 
-- ✅ **60 tests across 7 test suites** - All passing
+- ✅ **71 tests across 8 test suites** - All passing
 - ✅ **100% code coverage** - Every line, branch, and function tested
 - ✅ **Comprehensive edge cases** - Boundary conditions and complex scenarios
 - ✅ **API contract validation** - All endpoints thoroughly tested
+- ✅ **Logger testing** - Complete test coverage for logging functionality
 
 ### 🛡️ **Production Quality**
 
@@ -328,6 +360,7 @@ This UAE EOSB Calculator Backend is a **production-ready**, **fully-tested** API
 - ✅ **Error handling** - Robust error scenarios
 - ✅ **Security** - CORS, rate limiting, Helmet.js
 - ✅ **API documentation** - Swagger/OpenAPI integration
+- ✅ **Production logging** - Environment-configurable logging system
 
 ### 📊 **Key Features**
 
@@ -335,7 +368,7 @@ This UAE EOSB Calculator Backend is a **production-ready**, **fully-tested** API
 - ✅ Configuration API for frontend integration
 - ✅ Health check and monitoring endpoints
 - ✅ Development and production environments
-- ✅ Comprehensive logging and error tracking
+- ✅ Comprehensive logging with production optimization
 
 This backend is ready for deployment and integration with frontend applications, providing reliable and accurate EOSB calculations for UAE employees.
 
@@ -379,7 +412,7 @@ The project includes a comprehensive test suite with **100% code coverage** ensu
 ### Test Coverage Summary
 
 - **Overall Coverage**: 100% statements, 100% branches, 100% functions, 100% lines
-- **Test Suites**: 7 suites with 60 tests
+- **Test Suites**: 8 suites with 77 tests
 - **All Tests Passing**: ✅
 - **Zero Uncovered Lines**: All code paths tested and validated
 
@@ -394,6 +427,7 @@ The project includes a comprehensive test suite with **100% code coverage** ensu
 | **eosbRoutes.ts**     | 100%       | 100%     | 100%      | 100%  |
 | **configuration.ts**  | 100%       | 100%     | 100%      | 100%  |
 | **eosbCalculator.ts** | 100%       | 100%     | 100%      | 100%  |
+| **logger.ts**         | 100%       | 100%     | 100%      | 100%  |
 
 ### Test Categories
 

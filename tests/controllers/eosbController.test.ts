@@ -1,46 +1,53 @@
-import { Request, Response } from 'express';
-import { EOSBController } from '../../src/controllers/eosbController';
-import { EOSBCalculator } from '../../src/utils/eosbCalculator';
-import { appConfiguration } from '../../src/utils/configuration';
+import { Request, Response } from "express";
+import { EOSBController } from "../../src/controllers/eosbController";
+import { appConfiguration } from "../../src/utils/configuration";
+import { EOSBCalculator } from "../../src/utils/eosbCalculator";
+import { logger } from "../../src/utils/logger";
 
 // Mock the dependencies
-jest.mock('../../src/utils/eosbCalculator');
-jest.mock('../../src/utils/configuration');
+jest.mock("../../src/utils/eosbCalculator");
+jest.mock("../../src/utils/configuration");
+jest.mock("../../src/utils/logger");
 
-describe('EOSBController', () => {
+describe("EOSBController", () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let mockStatus: jest.Mock;
   let mockJson: jest.Mock;
+  let mockLogger: jest.Mocked<typeof logger>;
 
   beforeEach(() => {
     mockStatus = jest.fn().mockReturnThis();
     mockJson = jest.fn().mockReturnThis();
-    
+
     mockResponse = {
       status: mockStatus,
       json: mockJson,
     };
 
+    // Mock logger
+    mockLogger = logger as jest.Mocked<typeof logger>;
+    mockLogger.info = jest.fn();
+    mockLogger.logRequest = jest.fn();
+    mockLogger.logError = jest.fn();
+    mockLogger.error = jest.fn();
+
     // Reset mocks
     jest.clearAllMocks();
-    
-    // Mock console.error to avoid cluttering test output
-    jest.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  describe('calculateEOSB', () => {
-    test('should successfully calculate EOSB', async () => {
+  describe("calculateEOSB", () => {
+    test("should successfully calculate EOSB", async () => {
       const mockEmployeeData = {
         basicSalary: 10000,
-        terminationType: 'termination',
+        terminationType: "termination",
         isUnlimitedContract: true,
-        joiningDate: '2020-01-01',
-        lastWorkingDay: '2025-01-01'
+        joiningDate: "2020-01-01",
+        lastWorkingDay: "2025-01-01",
       };
 
       const mockResult = {
@@ -53,13 +60,17 @@ describe('EOSBController', () => {
         gratuityAmount: 35000,
         breakdown: {
           firstFiveYears: { years: 5, rate: 21, amount: 35000 },
-          additionalYears: { years: 0, rate: 30, amount: 0 }
+          additionalYears: { years: 0, rate: 30, amount: 0 },
         },
-        isEligible: true
+        isEligible: true,
       };
 
       mockRequest = {
-        body: mockEmployeeData
+        body: mockEmployeeData,
+        method: "POST",
+        url: "/api/eosb/calculate",
+        ip: "127.0.0.1",
+        get: jest.fn().mockReturnValue("test-user-agent"),
       };
 
       (EOSBCalculator.calculate as jest.Mock).mockReturnValue(mockResult);
@@ -69,29 +80,48 @@ describe('EOSBController', () => {
         mockResponse as Response
       );
 
+      expect(mockLogger.logRequest).toHaveBeenCalledWith(
+        mockRequest,
+        "Received employee data for EOSB calculation",
+        { employeeData: mockEmployeeData }
+      );
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        "EOSB calculation completed successfully",
+        {
+          result: {
+            gratuityAmount: mockResult.gratuityAmount,
+            totalServiceYears: mockResult.totalServiceYears,
+            isEligible: mockResult.isEligible,
+          },
+        }
+      );
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJson).toHaveBeenCalledWith({
         success: true,
         data: mockResult,
-        message: 'EOSB calculation completed successfully'
+        message: "EOSB calculation completed successfully",
       });
     });
 
-    test('should handle calculator error', async () => {
+    test("should handle calculator error", async () => {
       const mockEmployeeData = {
         basicSalary: 10000,
-        terminationType: 'termination',
+        terminationType: "termination",
         isUnlimitedContract: true,
-        joiningDate: '2020-01-01',
-        lastWorkingDay: '2025-01-01'
+        joiningDate: "2020-01-01",
+        lastWorkingDay: "2025-01-01",
       };
 
       mockRequest = {
-        body: mockEmployeeData
+        body: mockEmployeeData,
+        method: "POST",
+        url: "/api/eosb/calculate",
+        ip: "127.0.0.1",
+        get: jest.fn().mockReturnValue("test-user-agent"),
       };
 
       (EOSBCalculator.calculate as jest.Mock).mockImplementation(() => {
-        throw new Error('Calculator error');
+        throw new Error("Calculator error");
       });
 
       await EOSBController.calculateEOSB(
@@ -99,25 +129,26 @@ describe('EOSBController', () => {
         mockResponse as Response
       );
 
-      expect(console.error).toHaveBeenCalledWith(
-        'Error calculating EOSB:',
-        expect.any(Error)
+      expect(mockLogger.logError).toHaveBeenCalledWith(
+        expect.any(Error),
+        "Error calculating EOSB",
+        { employeeData: mockEmployeeData }
       );
       expect(mockStatus).toHaveBeenCalledWith(500);
       expect(mockJson).toHaveBeenCalledWith({
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to calculate EOSB'
+        error: "Internal server error",
+        message: "Failed to calculate EOSB",
       });
     });
 
-    test('should handle unexpected error types', async () => {
+    test("should handle unexpected error types", async () => {
       mockRequest = {
-        body: {}
+        body: {},
       };
 
       (EOSBCalculator.calculate as jest.Mock).mockImplementation(() => {
-        throw 'String error'; // Non-Error object
+        throw "String error"; // Non-Error object
       });
 
       await EOSBController.calculateEOSB(
@@ -128,68 +159,86 @@ describe('EOSBController', () => {
       expect(mockStatus).toHaveBeenCalledWith(500);
       expect(mockJson).toHaveBeenCalledWith({
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to calculate EOSB'
+        error: "Internal server error",
+        message: "Failed to calculate EOSB",
       });
     });
   });
 
-  describe('getConfiguration', () => {
-    test('should successfully return configuration', async () => {
+  describe("getConfiguration", () => {
+    test("should successfully return configuration", async () => {
       const mockConfig = {
         terminationTypes: [],
         contractTypes: [],
-        calculationRules: {}
+        calculationRules: {},
       };
 
       (appConfiguration as any) = mockConfig;
 
-      mockRequest = {};
+      mockRequest = {
+        method: "GET",
+        url: "/api/eosb/config",
+        ip: "127.0.0.1",
+        get: jest.fn().mockReturnValue("test-user-agent"),
+      };
 
       await EOSBController.getConfiguration(
         mockRequest as Request,
         mockResponse as Response
       );
 
+      expect(mockLogger.logRequest).toHaveBeenCalledWith(
+        mockRequest,
+        "Configuration data requested"
+      );
       expect(mockStatus).toHaveBeenCalledWith(200);
       expect(mockJson).toHaveBeenCalledWith({
         success: true,
         data: mockConfig,
-        message: 'Configuration data retrieved successfully'
+        message: "Configuration data retrieved successfully",
       });
     });
 
-    test('should handle configuration error', async () => {
-      mockRequest = {};
+    test("should handle configuration error", async () => {
+      mockRequest = {
+        method: "GET",
+        url: "/api/eosb/config",
+        ip: "127.0.0.1",
+        get: jest.fn().mockReturnValue("test-user-agent"),
+      };
 
       // Mock appConfiguration to throw an error when accessed
-      Object.defineProperty(require('../../src/utils/configuration'), 'appConfiguration', {
-        get: () => {
-          throw new Error('Configuration error');
-        },
-        configurable: true
-      });
+      Object.defineProperty(
+        require("../../src/utils/configuration"),
+        "appConfiguration",
+        {
+          get: () => {
+            throw new Error("Configuration error");
+          },
+          configurable: true,
+        }
+      );
 
       await EOSBController.getConfiguration(
         mockRequest as Request,
         mockResponse as Response
       );
 
-      expect(console.error).toHaveBeenCalledWith(
-        'Error getting configuration:',
-        expect.any(Error)
+      expect(mockLogger.logError).toHaveBeenCalledWith(
+        expect.any(Error),
+        "Error getting configuration"
       );
       expect(mockStatus).toHaveBeenCalledWith(500);
       expect(mockJson).toHaveBeenCalledWith({
         success: false,
-        error: 'Internal server error',
-        message: 'Failed to retrieve configuration data'
+        error: "Internal server error",
+        message: "Failed to retrieve configuration data",
       });
     });
   });
 
-  describe('healthCheck', () => {
-    test('should return health status', async () => {
+  describe("healthCheck", () => {
+    test("should return health status", async () => {
       mockRequest = {};
 
       await EOSBController.healthCheck(
@@ -201,10 +250,12 @@ describe('EOSBController', () => {
       expect(mockJson).toHaveBeenCalledWith({
         success: true,
         data: {
-          status: 'OK',
-          timestamp: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
+          status: "OK",
+          timestamp: expect.stringMatching(
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/
+          ),
         },
-        message: 'Service is healthy'
+        message: "Service is healthy",
       });
     });
   });

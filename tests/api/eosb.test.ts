@@ -482,8 +482,14 @@ describe("EOSB API Integration Tests", () => {
     });
 
     test("should handle all termination types", async () => {
-      const terminationTypes = ['termination', 'resignation', 'retirement', 'death', 'disability'];
-      
+      const terminationTypes = [
+        "termination",
+        "resignation",
+        "retirement",
+        "death",
+        "disability",
+      ];
+
       for (const terminationType of terminationTypes) {
         const employeeData = {
           basicSalary: 10000,
@@ -505,7 +511,7 @@ describe("EOSB API Integration Tests", () => {
 
     test("should handle both contract types", async () => {
       const contractTypes = [true, false];
-      
+
       for (const isUnlimitedContract of contractTypes) {
         const employeeData = {
           basicSalary: 10000,
@@ -533,7 +539,7 @@ describe("EOSB API Integration Tests", () => {
         joiningDate: "2020-01-01",
         lastWorkingDay: "2025-01-01",
         extraField: "should be ignored",
-        anotherField: 123
+        anotherField: 123,
       };
 
       const response = await request(app)
