@@ -48,7 +48,7 @@ const options = {
         description: "Development server",
       },
       {
-        url: "https://api.uae-eosb-calculator.com",
+        url: "https://uae-gratuity-calculator-backend.vercel.app",
         description: "Production server",
       },
     ],
