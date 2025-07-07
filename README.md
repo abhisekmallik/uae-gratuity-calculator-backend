@@ -334,6 +334,108 @@ ENABLE_CONSOLE_LOGGING=true
 - **Security**: helmet, cors, express-rate-limit
 - **Logging**: Custom logger with environment-based configuration, morgan for HTTP requests
 
+## Deployment
+
+This application is ready for deployment on **Vercel** with serverless functions support.
+
+### Deploy to Vercel
+
+#### Deployment Prerequisites
+
+- [Vercel account](https://vercel.com)
+- [Vercel CLI](https://vercel.com/cli) (optional, for local deployment)
+
+#### Quick Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/abhisekmallik/uae-gratuity-calculator-backend)
+
+#### Manual Deployment Steps
+
+1. **Fork/Clone the repository**
+
+```bash
+git clone https://github.com/abhisekmallik/uae-gratuity-calculator-backend
+cd uae-gratuity-calculator-backend
+```
+
+2. **Install Vercel CLI (optional)**
+
+```bash
+npm i -g vercel
+```
+
+3. **Deploy to Vercel**
+
+```bash
+# Using Vercel CLI
+vercel
+
+# Or connect your GitHub repository to Vercel dashboard
+```
+
+4. **Configure Environment Variables**
+
+In your Vercel dashboard, go to **Settings** → **Environment Variables** and add:
+
+```env
+NODE_ENV=production
+PORT=3000
+FRONTEND_URL=https://your-frontend-domain.vercel.app
+API_VERSION=1.0.0
+LOG_LEVEL=ERROR
+ENABLE_CONSOLE_LOGGING=false
+```
+
+#### Vercel Configuration
+
+The project includes:
+
+- **`vercel.json`** - Vercel deployment configuration
+- **`.vercelignore`** - Files to exclude from deployment
+- **`.env.production`** - Production environment variables template
+
+#### Post-Deployment
+
+After deployment, your API will be available at:
+
+```url
+https://your-project-name.vercel.app/api/eosb/
+```
+
+**Available endpoints:**
+
+- `GET /api/eosb/health` - Health check
+- `GET /api/eosb/config` - Configuration
+- `POST /api/eosb/calculate` - EOSB calculation
+- `GET /api-docs` - API documentation
+
+#### Production Considerations
+
+✅ **Serverless Optimization**: Configured for Vercel's serverless functions  
+✅ **Environment Variables**: Production-ready environment configuration  
+✅ **Logging**: Optimized logging for production (errors only)  
+✅ **CORS**: Configurable for your frontend domain  
+✅ **Security**: Helmet.js and rate limiting enabled  
+✅ **Documentation**: Swagger/OpenAPI available in production
+
+#### Monitoring
+
+- **Health Check**: Monitor `/api/eosb/health` endpoint
+- **Vercel Analytics**: Available in Vercel dashboard
+- **Function Logs**: View in Vercel dashboard under Functions tab
+
+### Local Production Testing
+
+Test production build locally:
+
+```bash
+# Set production environment
+NODE_ENV=production npm start
+
+# Test with production settings
+curl https://localhost:3001/api/eosb/health
+```
+
 ## Summary
 
 This UAE EOSB Calculator Backend is a **production-ready**, **fully-tested** API service that provides:
@@ -347,11 +449,12 @@ This UAE EOSB Calculator Backend is a **production-ready**, **fully-tested** API
 
 ### 🧪 **100% Test Coverage**
 
-- ✅ **71 tests across 8 test suites** - All passing
+- ✅ **82 tests across 9 test suites** - All passing
 - ✅ **100% code coverage** - Every line, branch, and function tested
 - ✅ **Comprehensive edge cases** - Boundary conditions and complex scenarios
 - ✅ **API contract validation** - All endpoints thoroughly tested
 - ✅ **Logger testing** - Complete test coverage for logging functionality
+- ✅ **Production testing** - Dedicated test suite for production environment scenarios
 
 ### 🛡️ **Production Quality**
 
@@ -412,7 +515,7 @@ The project includes a comprehensive test suite with **100% code coverage** ensu
 ### Test Coverage Summary
 
 - **Overall Coverage**: 100% statements, 100% branches, 100% functions, 100% lines
-- **Test Suites**: 8 suites with 77 tests
+- **Test Suites**: 9 suites with 82 tests
 - **All Tests Passing**: ✅
 - **Zero Uncovered Lines**: All code paths tested and validated
 
@@ -457,6 +560,14 @@ The project includes a comprehensive test suite with **100% code coverage** ensu
 - **Configuration API** - Dynamic configuration retrieval
 - **Health Checks** - Service availability monitoring
 
+#### 5. Production Environment Tests
+
+- **Production Settings** - Verify production environment configuration
+- **Production Logging** - Test logging behavior in production mode
+- **Production CORS** - Validate CORS settings for production
+- **Production Error Handling** - Error responses in production environment
+- **Production Performance** - Basic performance validation
+
 ### Running Tests
 
 ```bash
@@ -486,9 +597,11 @@ tests/
 ├── middleware/             # Middleware tests
 │   ├── errorHandler.test.ts
 │   └── validation.test.ts
-└── utils/                  # Utility function tests
-    ├── eosbCalculator.test.ts
-    └── eosbCalculatorEdgeCases.test.ts
+├── utils/                  # Utility function tests
+│   ├── eosbCalculator.test.ts
+│   ├── eosbCalculatorEdgeCases.test.ts
+│   └── logger.test.ts
+└── production.test.ts      # Production environment tests
 ```
 
 ### Coverage Report
@@ -503,6 +616,8 @@ The test suite covers all critical scenarios including:
 - ✅ **Security middleware** and CORS functionality
 - ✅ **Swagger documentation** endpoints
 - ✅ **Configuration management** and health checks
+- ✅ **Logger functionality** with all log levels and environments
+- ✅ **Production environment** settings and behavior
 
 ### Quality Assurance
 
@@ -524,3 +639,4 @@ The testing strategy focuses on:
 3. **API Reliability**: Comprehensive endpoint testing with edge cases
 4. **Error Resilience**: Robust error handling and graceful failure modes
 5. **Security Compliance**: Input validation and security middleware testing
+6. **Production Readiness**: Dedicated testing for production environment scenarios and configurations

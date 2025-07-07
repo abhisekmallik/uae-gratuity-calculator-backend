@@ -1,12 +1,13 @@
 {
   "name": "uae-gratuity-calculator-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "A RESTful API service for calculating End of Service Benefits (EOSB) according to UAE Labor Law Article 132 with accurate calculation formula, comprehensive validation, and production-ready features.",
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "vercel-build": "echo 'No build step required for Vercel'",
     "lint": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -25,7 +26,10 @@
     "typescript",
     "nodejs",
     "backend",
-    "rest-api"
+    "rest-api",
+    "vercel",
+    "serverless",
+    "production-ready"
   ],
   "author": "Abhisek Mallik",
   "license": "ISC",
