@@ -49,7 +49,7 @@ const options = {
       },
       {
         url: "https://uae-gratuity-calculator-backend.vercel.app",
-        description: "Production server",
+        description: "Production server (update with your actual Vercel URL)",
       },
     ],
     components: {
@@ -372,12 +372,19 @@ export const setupSwagger = (app: Express): void => {
       explorer: true,
       customCss: ".swagger-ui .topbar { display: none }",
       customSiteTitle: "UAE EOSB Calculator API Documentation",
+      swaggerOptions: {
+        url: "/api-docs.json"
+      },
     })
   );
 
   // JSON endpoint for API specs
   app.get("/api-docs.json", (req, res) => {
     res.setHeader("Content-Type", "application/json");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.send(specs);
   });
 };
