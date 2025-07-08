@@ -49,7 +49,7 @@ const options = {
       },
       {
         url: "https://uae-gratuity-calculator-backend.vercel.app",
-        description: "Production server (update with your actual Vercel URL)",
+        description: "Production server",
       },
     ],
     components: {
@@ -384,7 +384,6 @@ export const setupSwagger = (app: Express): void => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.send(specs);
   });
 };
