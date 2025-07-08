@@ -373,7 +373,7 @@ export const setupSwagger = (app: Express): void => {
       customCss: ".swagger-ui .topbar { display: none }",
       customSiteTitle: "UAE EOSB Calculator API Documentation",
       swaggerOptions: {
-        url: "/api-docs.json"
+        url: "/api-docs.json",
       },
     })
   );

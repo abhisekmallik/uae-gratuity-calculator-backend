@@ -380,7 +380,7 @@ In your Vercel dashboard, go to **Settings** → **Environment Variables** and a
 ```env
 NODE_ENV=production
 PORT=3000
-FRONTEND_URL=https://your-frontend-domain.vercel.app
+FRONTEND_URL=https://uae-gratuity-calculator.vercel.app
 API_VERSION=1.0.0
 LOG_LEVEL=ERROR
 ENABLE_CONSOLE_LOGGING=false
@@ -399,7 +399,7 @@ The project includes:
 After deployment, your API will be available at:
 
 ```url
-https://your-project-name.vercel.app/api/eosb/
+https://uae-gratuity-calculator-backend.vercel.app/api/eosb/
 ```
 
 **Available endpoints:**
